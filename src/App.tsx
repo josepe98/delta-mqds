@@ -54,7 +54,7 @@ export default function App() {
             onEntriesChange={setEntries}
           />
         )}
-        {tab === 'import' && <ImportPanel entries={entries} onEntriesChange={setEntries} />}
+        {tab === 'import' && <ImportPanel entries={entries} onEntriesChange={setEntries} onNavigate={setTab} />}
         {tab === 'settings' && (
           <Settings
             settings={settings}

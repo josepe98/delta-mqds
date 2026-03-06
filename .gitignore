@@ -2,6 +2,5 @@ node_modules
 dist
 .DS_Store
 *.local
-debug-pdf.mjs
-debug-normalized.mjs
+debug-*.mjs
 project_files/

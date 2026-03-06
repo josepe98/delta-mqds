@@ -22,6 +22,12 @@ function parseMoney(text: string): number {
   return parseInt(m[1].replace(/,/g, ''), 10);
 }
 
+function parseDollarAmount(text: string): number {
+  const m = text.match(/\$([-,\d]+)/);
+  if (!m) return 0;
+  return parseInt(m[1].replace(/,/g, ''), 10);
+}
+
 function parseMiles(text: string): number {
   const m = text.match(/([-,\d]+)\s*Miles/);
   if (!m) return 0;
@@ -49,6 +55,7 @@ function normalizeText(text: string): string[] {
       if (l === 'View AMEX benefits') return false;
       if (l === 'View Details') return false;
       if (l === 'View Partner Network') return false;
+      if (l.startsWith('Seat Purchase')) return false;
       return true;
     });
 }
@@ -110,7 +117,7 @@ function parsePendingSection(lines: string[]): ParsedBlock[] {
           if (d) date = d;
         }
         if (line.includes('MQDs')) {
-          totalMQDs = parseMoney(line);
+          totalMQDs = parseDollarAmount(line);
         }
         // Stop if we hit the next flight entry
         const nextPair = line.match(/^([A-Z]{3})\s+([A-Z]{3})$/);
@@ -164,7 +171,9 @@ function parsePostedSection(lines: string[]): ParsedBlock[] {
       // Cars & Stays
       (/rental|Delta\.com\/cars|Delta\.com\/hotels/i.test(line) && !line.startsWith('Bonus')) ||
       // Rollover
-      /^Rollover MQDs/i.test(line);
+      /^Rollover MQDs/i.test(line) ||
+      // Distance Flown marks a boundary — orphaned MQD entries follow
+      /^Distance Flown/.test(line);
 
     if (isEntryStart && current.length > 0) {
       blocks.push(current);
@@ -198,7 +207,25 @@ function parsePostedBlock(block: string[]): ParsedBlock | null {
   let destination: string | undefined;
   let flightNumber: string | undefined;
 
-  if (/^MQD Boost:/.test(header)) {
+  if (/^Distance Flown/.test(header)) {
+    // Orphaned entry after a flight — look for Bonus MQDs line to determine category
+    const bonusLine = block.find((l) => l.startsWith('Bonus MQDs:'));
+    if (bonusLine) {
+      if (bonusLine.includes('MQD Boost')) {
+        category = 'MQD Boost';
+        const cardMatch = bonusLine.match(/MQD Boost:\s*(.+?)\s*\$/);
+        description = cardMatch ? cardMatch[1] : 'MQD Boost';
+      } else if (bonusLine.includes('MQD Headstart')) {
+        category = 'MQD Headstart';
+        const cardMatch = bonusLine.match(/MQD Headstart:\s*(.+?)\s*\$/);
+        description = cardMatch ? cardMatch[1] : 'MQD Headstart';
+      } else {
+        return null; // Unknown orphaned entry
+      }
+    } else {
+      return null; // No MQD data in this block
+    }
+  } else if (/^MQD Boost:/.test(header)) {
     category = 'MQD Boost';
     description = header.replace('MQD Boost: ', '');
   } else if (/^MQD Headstart:/.test(header)) {
@@ -295,7 +322,7 @@ function parsePostedBlock(block: string[]): ParsedBlock | null {
         bonusMQDs = parseMoney(block[i + 1]);
       }
     }
-    if (/^Total MQDs/.test(line)) {
+    if (/^Total MQDs/.test(line) && !totalMQDs) {
       const val = parseMoney(line);
       if (val) {
         totalMQDs = val;
@@ -306,7 +333,7 @@ function parsePostedBlock(block: string[]): ParsedBlock | null {
 
     // Top-level summary line: "$27 MQDs" or "$275 MQDs"
     if (line.includes('MQDs') && /\$[-,\d]+\s*MQDs/.test(line) && !line.startsWith('Bonus') && !line.startsWith('Base') && !/^Total/.test(line)) {
-      const topMqd = parseMoney(line);
+      const topMqd = parseDollarAmount(line);
       if (topMqd && !totalMQDs) totalMQDs = topMqd;
     }
 
@@ -315,6 +342,9 @@ function parsePostedBlock(block: string[]): ParsedBlock | null {
       totalMiles = parseMiles(line);
     }
   }
+
+  // For orphaned entries (Distance Flown blocks), use postedDate as date
+  if (!date && postedDate) date = postedDate;
 
   // Skip entries with no MQDs and negative miles (pure redemptions)
   if (!totalMQDs && totalMiles <= 0) return null;

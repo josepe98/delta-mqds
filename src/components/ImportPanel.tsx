@@ -7,11 +7,12 @@ import { formatMQDs, formatDate } from '../utils/formatters';
 interface Props {
   entries: MQDEntry[];
   onEntriesChange: (entries: MQDEntry[]) => void;
+  onNavigate: (tab: 'dashboard') => void;
 }
 
 type ImportState = 'idle' | 'parsing' | 'review' | 'error';
 
-export function ImportPanel({ entries, onEntriesChange }: Props) {
+export function ImportPanel({ entries, onEntriesChange, onNavigate }: Props) {
   const currentYear = new Date().getFullYear();
   const [state, setState] = useState<ImportState>('idle');
   const [error, setError] = useState('');
@@ -54,6 +55,7 @@ export function ImportPanel({ entries, onEntriesChange }: Props) {
     setState('idle');
     setParsed([]);
     setDedupResult(null);
+    onNavigate('dashboard');
   }
 
   function reset() {
@@ -144,6 +146,15 @@ export function ImportPanel({ entries, onEntriesChange }: Props) {
             </div>
           </div>
 
+          <div className="review-actions">
+            <button className="btn primary" onClick={handleImport}>
+              Import {dedupResult.newEntries.length + dedupResult.updated.length} entries
+            </button>
+            <button className="btn" onClick={reset}>
+              Cancel
+            </button>
+          </div>
+
           {dedupResult.newEntries.length > 0 && (
             <div className="review-section">
               <h4>New Entries</h4>
@@ -202,14 +213,6 @@ export function ImportPanel({ entries, onEntriesChange }: Props) {
             </div>
           )}
 
-          <div className="review-actions">
-            <button className="btn primary" onClick={handleImport}>
-              Import {dedupResult.newEntries.length + dedupResult.updated.length} entries
-            </button>
-            <button className="btn" onClick={reset}>
-              Cancel
-            </button>
-          </div>
         </div>
       )}
     </div>
