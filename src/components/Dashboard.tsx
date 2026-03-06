@@ -60,7 +60,9 @@ export function Dashboard({ entries, settings, onSettingsChange }: Props) {
   );
   const now = new Date();
   const currentMonth = now.getMonth() + 1;
-  const monthsRemaining = 12 - currentMonth;
+  const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+  const partialMonth = (daysInMonth - now.getDate()) / daysInMonth;
+  const monthsRemaining = (12 - currentMonth) + partialMonth;
   const projectedBoostMQDs = Math.round(monthlyBoostMQDs * monthsRemaining);
   const anticipatedTripMQDs = settings.anticipatedTrips.reduce((sum, t) => sum + t.mqds, 0);
   const totalProjectedMQDs = projectedBoostMQDs + anticipatedTripMQDs;
@@ -312,7 +314,7 @@ export function Dashboard({ entries, settings, onSettingsChange }: Props) {
               <div className="forecast-grid" style={{ marginTop: '0.75rem' }}>
                 <div className="forecast-item">
                   <span className="forecast-label">Months remaining</span>
-                  <span className="forecast-value">{monthsRemaining}</span>
+                  <span className="forecast-value">{monthsRemaining.toFixed(1)}</span>
                 </div>
                 <div className="forecast-item highlight">
                   <span className="forecast-label">Projected card boost</span>
