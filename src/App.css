@@ -783,6 +783,10 @@ body {
   border-bottom: none;
 }
 
+.forecast-item:has(+ .forecast-item.highlight) {
+  border-bottom: none;
+}
+
 .forecast-item.highlight {
   font-weight: 600;
   color: var(--color-primary);
@@ -797,6 +801,27 @@ body {
 
 .forecast-item.highlight .forecast-label {
   color: var(--color-primary);
+}
+
+/* How to Use */
+.how-to-use {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.how-to-use h2 {
+  font-size: 1.1rem;
+}
+
+.how-to-use ol,
+.how-to-use ul {
+  padding-left: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  font-size: 0.9rem;
+  line-height: 1.6;
 }
 
 /* Responsive */

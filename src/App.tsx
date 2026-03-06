@@ -1,24 +1,17 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { MQDEntry, UserSettings, Tab } from './types';
-import { loadEntries, saveEntries, loadSettings, saveSettings } from './store';
+import { defaultSettings } from './store';
 import { Dashboard } from './components/Dashboard';
 import { ActivityTable } from './components/ActivityTable';
 import { ImportPanel } from './components/ImportPanel';
 import { Settings } from './components/Settings';
+import { HowToUse } from './components/HowToUse';
 import './App.css';
 
 export default function App() {
-  const [entries, setEntries] = useState<MQDEntry[]>(() => loadEntries());
-  const [settings, setSettings] = useState<UserSettings>(() => loadSettings());
+  const [entries, setEntries] = useState<MQDEntry[]>([]);
+  const [settings, setSettings] = useState<UserSettings>(defaultSettings);
   const [tab, setTab] = useState<Tab>('dashboard');
-
-  useEffect(() => {
-    saveEntries(entries);
-  }, [entries]);
-
-  useEffect(() => {
-    saveSettings(settings);
-  }, [settings]);
 
   return (
     <div className="app">
@@ -41,6 +34,9 @@ export default function App() {
           </button>
           <button className={tab === 'settings' ? 'active' : ''} onClick={() => setTab('settings')}>
             Settings
+          </button>
+          <button className={tab === 'how-to-use' ? 'active' : ''} onClick={() => setTab('how-to-use')}>
+            How to Use
           </button>
         </nav>
       </header>
@@ -71,10 +67,12 @@ export default function App() {
             onEntriesChange={setEntries}
           />
         )}
+        {tab === 'how-to-use' && <HowToUse />}
       </main>
 
       <footer className="app-footer">
-        <p>All data stays in your browser. Nothing is sent to any server.</p>
+        <p>&copy; 2026 Erik Josephson. All rights reserved.</p>
+        <p>No data is stored or sent anywhere. When you leave the page, all data is gone.</p>
         <p className="disclaimer">
           This site is not affiliated with, endorsed by, or in any way officially connected to Delta Air Lines, Inc.
           All trademarks and service marks are the property of their respective owners.

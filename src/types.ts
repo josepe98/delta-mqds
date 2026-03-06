@@ -63,4 +63,4 @@ export const DEFAULT_CATEGORIES = [
   'Delta Cars & Stays',
 ];
 
-export type Tab = 'dashboard' | 'activity' | 'import' | 'settings';
+export type Tab = 'dashboard' | 'activity' | 'import' | 'settings' | 'how-to-use';

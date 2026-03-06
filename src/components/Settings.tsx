@@ -140,8 +140,9 @@ export function Settings({ settings, entries, onSettingsChange, onEntriesChange 
                 <td className="num">
                   <input
                     type="number"
-                    value={card.monthlySpend}
+                    value={card.monthlySpend || ''}
                     onChange={(e) => updateCard(card.id, 'monthlySpend', Number(e.target.value))}
+                    placeholder="0"
                     style={{ width: '6em' }}
                   />
                 </td>

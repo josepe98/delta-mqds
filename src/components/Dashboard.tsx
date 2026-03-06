@@ -282,29 +282,49 @@ export function Dashboard({ entries, settings, onSettingsChange }: Props) {
       <div className="dashboard-grid">
         <div className="card">
           <h3>Spending Forecast</h3>
-          <div className="forecast-grid">
-            {settings.cards.map((card) => (
-              <div key={card.id} className="forecast-item">
-                <span className="forecast-label">{card.name}</span>
-                <span className="forecast-value">
-                  ${card.monthlySpend.toLocaleString()}/mo = ~$
-                  {Math.round(card.monthlySpend / card.mqdRate).toLocaleString()} MQDs/mo
-                </span>
+          {settings.cards.length > 0 ? (
+            <>
+              <table className="data-table compact">
+                <thead>
+                  <tr>
+                    <th>Card</th>
+                    <th className="num">Monthly Spend</th>
+                    <th className="num">Monthly MQDs</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {settings.cards.map((card) => (
+                    <tr key={card.id}>
+                      <td>{card.name}</td>
+                      <td className="num">{formatMQDs(card.monthlySpend)}</td>
+                      <td className="num">{formatMQDs(Math.round(card.monthlySpend / card.mqdRate))}</td>
+                    </tr>
+                  ))}
+                  <tr className="total-row">
+                    <td>Total</td>
+                    <td className="num">
+                      {formatMQDs(settings.cards.reduce((s, c) => s + c.monthlySpend, 0))}
+                    </td>
+                    <td className="num">{formatMQDs(Math.round(monthlyBoostMQDs))}</td>
+                  </tr>
+                </tbody>
+              </table>
+              <div className="forecast-grid" style={{ marginTop: '0.75rem' }}>
+                <div className="forecast-item">
+                  <span className="forecast-label">Months remaining</span>
+                  <span className="forecast-value">{monthsRemaining}</span>
+                </div>
+                <div className="forecast-item highlight">
+                  <span className="forecast-label">Projected card boost</span>
+                  <span className="forecast-value">{formatMQDs(projectedBoostMQDs)}</span>
+                </div>
               </div>
-            ))}
-            <div className="forecast-item">
-              <span className="forecast-label">Projected MQD Boost/mo</span>
-              <span className="forecast-value">{formatMQDs(Math.round(monthlyBoostMQDs))}</span>
-            </div>
-            <div className="forecast-item">
-              <span className="forecast-label">Months remaining</span>
-              <span className="forecast-value">{monthsRemaining}</span>
-            </div>
-            <div className="forecast-item highlight">
-              <span className="forecast-label">Projected card boost</span>
-              <span className="forecast-value">{formatMQDs(projectedBoostMQDs)}</span>
-            </div>
-          </div>
+            </>
+          ) : (
+            <p className="card-description">
+              Import a PDF to auto-detect your credit cards, then configure monthly spend in Settings.
+            </p>
+          )}
         </div>
 
         <div className="card">

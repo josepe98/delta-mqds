@@ -1,23 +1,7 @@
 import { MQDEntry, UserSettings, CardConfig } from './types';
 
-const ENTRIES_KEY = 'mqd-tracker-entries';
-const SETTINGS_KEY = 'mqd-tracker-settings';
-
 function generateId(): string {
   return crypto.randomUUID();
-}
-
-export function loadEntries(): MQDEntry[] {
-  try {
-    const raw = localStorage.getItem(ENTRIES_KEY);
-    return raw ? JSON.parse(raw) : [];
-  } catch {
-    return [];
-  }
-}
-
-export function saveEntries(entries: MQDEntry[]): void {
-  localStorage.setItem(ENTRIES_KEY, JSON.stringify(entries));
 }
 
 export function defaultSettings(): UserSettings {
@@ -75,19 +59,6 @@ export function extractCardsFromEntries(entries: MQDEntry[], existingCards: Card
   }
 
   return merged;
-}
-
-export function loadSettings(): UserSettings {
-  try {
-    const raw = localStorage.getItem(SETTINGS_KEY);
-    return raw ? { ...defaultSettings(), ...JSON.parse(raw) } : defaultSettings();
-  } catch {
-    return defaultSettings();
-  }
-}
-
-export function saveSettings(settings: UserSettings): void {
-  localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
 }
 
 export function createCard(name: string, monthlySpend: number, mqdRate: number): CardConfig {
