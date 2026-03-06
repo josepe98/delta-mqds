@@ -70,8 +70,10 @@ export function HowToUse() {
             to any cloud service. All data exists only in memory while the page is open.
           </li>
           <li>
-            <strong>No history.</strong> There are no user accounts, no login, and no tracking
-            of any kind.
+            <strong>No history.</strong> There are no user accounts and no login.
+            We use Vercel Analytics to count page views and measure performance.
+            This collects no personal data, does not use cookies, and cannot see
+            any of your imported MQD data.
           </li>
           <li>
             <strong>When you leave, it's gone.</strong> If you close the tab, refresh the page,

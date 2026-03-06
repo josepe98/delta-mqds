@@ -6,6 +6,7 @@ import { ActivityTable } from './components/ActivityTable';
 import { ImportPanel } from './components/ImportPanel';
 import { Settings } from './components/Settings';
 import { HowToUse } from './components/HowToUse';
+import { Analytics } from '@vercel/analytics/react';
 import './App.css';
 
 export default function App() {
@@ -78,6 +79,7 @@ export default function App() {
           All trademarks and service marks are the property of their respective owners.
         </p>
       </footer>
+      <Analytics />
     </div>
   );
 }
