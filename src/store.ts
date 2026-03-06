@@ -70,7 +70,11 @@ export function createEntry(partial: Omit<MQDEntry, 'id'>): MQDEntry {
 }
 
 function csvEscape(value: string): string {
-  if (value.includes(',') || value.includes('"') || value.includes('\n')) {
+  // Guard against formula injection in Excel/Sheets
+  if (/^[=+\-@]/.test(value)) {
+    value = "'" + value;
+  }
+  if (value.includes(',') || value.includes('"') || value.includes('\n') || value.includes("'")) {
     return `"${value.replace(/"/g, '""')}"`;
   }
   return value;
