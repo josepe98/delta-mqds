@@ -80,6 +80,14 @@ export function HowToUse() {
           </li>
         </ul>
       </div>
+
+      <div className="card">
+        <h3>Feedback</h3>
+        <p style={{ fontSize: '0.9rem', lineHeight: 1.6 }}>
+          Have a suggestion, found a bug, or want to request a feature? Email me
+          at <a href="mailto:mqdtracker@fastmail.com">mqdtracker@fastmail.com</a>.
+        </p>
+      </div>
     </div>
   );
 }
