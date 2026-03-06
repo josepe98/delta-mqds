@@ -1,18 +1,21 @@
 import { useState, useRef } from 'react';
-import { MQDEntry } from '../types';
+import { MQDEntry, UserSettings } from '../types';
 import { parseDeltaPDF } from '../utils/pdfParser';
 import { deduplicateEntries, mergeEntries } from '../utils/dedup';
+import { extractCardsFromEntries } from '../store';
 import { formatMQDs, formatDate } from '../utils/formatters';
 
 interface Props {
   entries: MQDEntry[];
+  settings: UserSettings;
   onEntriesChange: (entries: MQDEntry[]) => void;
+  onSettingsChange: (settings: UserSettings) => void;
   onNavigate: (tab: 'dashboard') => void;
 }
 
 type ImportState = 'idle' | 'parsing' | 'review' | 'error';
 
-export function ImportPanel({ entries, onEntriesChange, onNavigate }: Props) {
+export function ImportPanel({ entries, settings, onEntriesChange, onSettingsChange, onNavigate }: Props) {
   const currentYear = new Date().getFullYear();
   const [state, setState] = useState<ImportState>('idle');
   const [error, setError] = useState('');
@@ -52,6 +55,10 @@ export function ImportPanel({ entries, onEntriesChange, onNavigate }: Props) {
     if (!dedupResult) return;
     const merged = mergeEntries(entries, dedupResult.newEntries, dedupResult.updated);
     onEntriesChange(merged);
+    const updatedCards = extractCardsFromEntries(merged, settings.cards);
+    if (updatedCards.length !== settings.cards.length) {
+      onSettingsChange({ ...settings, cards: updatedCards });
+    }
     setState('idle');
     setParsed([]);
     setDedupResult(null);

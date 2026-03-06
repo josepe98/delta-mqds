@@ -23,12 +23,58 @@ export function saveEntries(entries: MQDEntry[]): void {
 export function defaultSettings(): UserSettings {
   return {
     targetLevel: 'Diamond',
-    cards: [
-      { id: generateId(), name: 'Delta Amex Reserve', monthlySpend: 9000, mqdRate: 10 },
-      { id: generateId(), name: 'Delta Amex Platinum', monthlySpend: 1000, mqdRate: 20 },
-    ],
+    cards: [],
     customCategories: [],
+    anticipatedTrips: [],
   };
+}
+
+// Known card MQD rates: dollars spent per $1 MQD
+const KNOWN_CARD_RATES: Record<string, number> = {
+  'reserve': 10,
+  'platinum': 20,
+  'gold': 20,
+  'blue': 20,
+};
+
+function detectMqdRate(cardName: string): number {
+  const lower = cardName.toLowerCase();
+  for (const [keyword, rate] of Object.entries(KNOWN_CARD_RATES)) {
+    if (lower.includes(keyword)) return rate;
+  }
+  return 10; // default
+}
+
+function normalizeCardName(description: string): string {
+  // Normalize "Delta AmEx" vs "Delta Amex" casing
+  return description.replace(/AmEx/g, 'Amex');
+}
+
+export function extractCardsFromEntries(entries: MQDEntry[], existingCards: CardConfig[]): CardConfig[] {
+  const cardNames = new Set<string>();
+  for (const e of entries) {
+    if (e.category === 'MQD Boost' || e.category === 'MQD Headstart') {
+      const name = normalizeCardName(e.description);
+      if (name) cardNames.add(name);
+    }
+  }
+
+  const existingNames = new Set(existingCards.map((c) => c.name.toLowerCase()));
+  const merged = [...existingCards];
+
+  for (const name of cardNames) {
+    if (!existingNames.has(name.toLowerCase())) {
+      merged.push({
+        id: generateId(),
+        name,
+        monthlySpend: 0,
+        mqdRate: detectMqdRate(name),
+      });
+      existingNames.add(name.toLowerCase());
+    }
+  }
+
+  return merged;
 }
 
 export function loadSettings(): UserSettings {

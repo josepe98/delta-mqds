@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { UserSettings, StatusLevel, STATUS_THRESHOLDS, MQDEntry } from '../types';
+import { UserSettings, StatusLevel, STATUS_THRESHOLDS, STATUS_COLORS, MQDEntry } from '../types';
 import { createCard, exportData, importData } from '../store';
 import { formatMQDs } from '../utils/formatters';
 
@@ -18,10 +18,6 @@ export function Settings({ settings, entries, onSettingsChange, onEntriesChange 
 
   function handleTargetChange(level: StatusLevel) {
     onSettingsChange({ ...settings, targetLevel: level });
-  }
-
-  function handleCustomTarget(val: number) {
-    onSettingsChange({ ...settings, customTarget: val });
   }
 
   function addCategory() {
@@ -115,27 +111,13 @@ export function Settings({ settings, entries, onSettingsChange, onEntriesChange 
               key={level}
               className={`target-btn ${settings.targetLevel === level ? 'active' : ''}`}
               onClick={() => handleTargetChange(level)}
+              style={{ '--tier-color': STATUS_COLORS[level] } as React.CSSProperties}
             >
+              <span className="tier-badge" />
               <span className="target-level">{level}</span>
               <span className="target-amount">{formatMQDs(STATUS_THRESHOLDS[level])}</span>
             </button>
           ))}
-          <button
-            className={`target-btn ${settings.targetLevel === 'Custom' ? 'active' : ''}`}
-            onClick={() => handleTargetChange('Custom')}
-          >
-            <span className="target-level">Custom</span>
-            {settings.targetLevel === 'Custom' && (
-              <input
-                type="number"
-                className="custom-target-input"
-                value={settings.customTarget || ''}
-                onChange={(e) => handleCustomTarget(Number(e.target.value))}
-                onClick={(e) => e.stopPropagation()}
-                placeholder="Amount"
-              />
-            )}
-          </button>
         </div>
       </div>
 
@@ -154,12 +136,7 @@ export function Settings({ settings, entries, onSettingsChange, onEntriesChange 
           <tbody>
             {settings.cards.map((card) => (
               <tr key={card.id}>
-                <td>
-                  <input
-                    value={card.name}
-                    onChange={(e) => updateCard(card.id, 'name', e.target.value)}
-                  />
-                </td>
+                <td className="card-name">{card.name}</td>
                 <td className="num">
                   <input
                     type="number"

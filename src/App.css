@@ -37,31 +37,41 @@ body {
 .app-header {
   background: var(--color-primary);
   color: white;
-  padding: 0 2rem;
+  padding: 0.75rem 2rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 60px;
   position: sticky;
   top: 0;
   z-index: 100;
 }
 
-.header-left {
+.header-brand {
   display: flex;
   align-items: center;
-  gap: 1.5rem;
+  gap: 0.75rem;
+}
+
+.header-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.app-logo {
+  height: 90px;
+  width: auto;
+  object-fit: contain;
 }
 
 .app-title {
-  font-size: 1.1rem;
+  font-size: 1.3rem;
   font-weight: 700;
   letter-spacing: -0.02em;
 }
 
 .header-total {
   font-size: 0.85rem;
-  opacity: 0.8;
+  opacity: 0.7;
   font-weight: 500;
 }
 
@@ -112,6 +122,16 @@ body {
   border-top: 1px solid var(--color-border);
 }
 
+.card-name {
+  font-weight: 500;
+}
+
+.disclaimer {
+  margin-top: 0.5rem;
+  font-size: 0.7rem;
+  opacity: 0.7;
+}
+
 /* Cards */
 .card {
   background: var(--color-surface);
@@ -143,11 +163,34 @@ body {
   margin-bottom: 1.5rem;
 }
 
+.hero-title-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 1rem;
+}
+
 .hero-card h2 {
   font-size: 1rem;
   font-weight: 500;
   opacity: 0.9;
-  margin-bottom: 1rem;
+}
+
+/* Tier badges */
+.tier-badge {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--tier-color, #888);
+  box-shadow: inset 0 -2px 4px rgba(0, 0, 0, 0.2), 0 1px 2px rgba(0, 0, 0, 0.15);
+  flex-shrink: 0;
+}
+
+.tier-badge.large {
+  width: 26px;
+  height: 26px;
+  box-shadow: inset 0 -2px 4px rgba(0, 0, 0, 0.25), 0 0 8px rgba(255, 255, 255, 0.3);
 }
 
 .hero-numbers {
@@ -183,12 +226,16 @@ body {
   color: #fcd34d;
 }
 
+.hero-value.projected {
+  color: #93c5fd;
+}
+
 .progress-bar-container {
   background: rgba(255, 255, 255, 0.2);
   border-radius: 4px;
   height: 8px;
-  overflow: hidden;
-  margin-bottom: 0.5rem;
+  margin-bottom: 1.5rem;
+  position: relative;
 }
 
 .progress-bar {
@@ -198,9 +245,69 @@ body {
   transition: width 0.5s ease;
 }
 
+.progress-bar.earned-segment,
+.progress-bar.pending-segment,
+.progress-bar.projected-segment {
+  overflow: hidden;
+}
+
+.progress-bar.earned-segment {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: #6ee7b7;
+  border-radius: 4px 0 0 4px;
+}
+
+.progress-bar.pending-segment {
+  position: absolute;
+  top: 0;
+  background: #fcd34d;
+  border-radius: 0;
+}
+
+.progress-bar.projected-segment {
+  position: absolute;
+  top: 0;
+  background: #93c5fd;
+  border-radius: 0 4px 4px 0;
+}
+
+.target-marker {
+  position: absolute;
+  top: -4px;
+  bottom: -4px;
+  width: 2px;
+  background: white;
+  z-index: 1;
+}
+
+.target-marker::after {
+  content: attr(data-label);
+  position: absolute;
+  bottom: -18px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.85);
+  white-space: nowrap;
+}
+
 .progress-text {
   font-size: 0.85rem;
   opacity: 0.85;
+}
+
+/* Projection card spacing */
+.projection-card {
+  margin-top: 1.5rem;
+  margin-bottom: 0;
+}
+
+.dashboard > .dashboard-grid + .dashboard-grid,
+.projection-card + .dashboard-grid {
+  margin-top: 1.5rem;
 }
 
 /* Dashboard grid */
@@ -573,7 +680,7 @@ body {
 
 .target-grid {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 0.5rem;
 }
 

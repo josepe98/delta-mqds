@@ -25,6 +25,12 @@ export interface CardConfig {
   mqdRate: number; // dollars spent per $1 MQD (e.g., 10 for Reserve, 20 for Platinum)
 }
 
+export interface AnticipatedTrip {
+  id: string;
+  description: string;
+  mqds: number;
+}
+
 export type StatusLevel = 'Silver' | 'Gold' | 'Platinum' | 'Diamond' | 'Custom';
 
 export interface UserSettings {
@@ -32,13 +38,22 @@ export interface UserSettings {
   customTarget?: number;
   cards: CardConfig[];
   customCategories: string[];
+  anticipatedTrips: AnticipatedTrip[];
 }
 
 export const STATUS_THRESHOLDS: Record<Exclude<StatusLevel, 'Custom'>, number> = {
-  Silver: 6000,
-  Gold: 12000,
-  Platinum: 18000,
+  Silver: 5000,
+  Gold: 10000,
+  Platinum: 15000,
   Diamond: 28000,
+
+};
+
+export const STATUS_COLORS: Record<Exclude<StatusLevel, 'Custom'>, string> = {
+  Silver: '#a8a9ad',
+  Gold: '#d4a843',
+  Platinum: '#7b8794',
+  Diamond: '#1a5276',
 };
 
 export const DEFAULT_CATEGORIES = [

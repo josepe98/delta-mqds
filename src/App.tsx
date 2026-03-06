@@ -20,14 +20,14 @@ export default function App() {
     saveSettings(settings);
   }, [settings]);
 
-  const totalMQDs = entries.reduce((s, e) => s + e.totalMQDs, 0);
-
   return (
     <div className="app">
       <header className="app-header">
-        <div className="header-left">
-          <h1 className="app-title">Delta MQD Tracker</h1>
-          <span className="header-total">${totalMQDs.toLocaleString()} MQDs</span>
+        <div className="header-brand">
+          <img src="/logo-white.svg" alt="MQD Tracker" className="app-logo" />
+          <div className="header-text">
+            <h1 className="app-title">MQD Tracker</h1>
+          </div>
         </div>
         <nav className="tab-nav">
           <button className={tab === 'dashboard' ? 'active' : ''} onClick={() => setTab('dashboard')}>
@@ -46,7 +46,7 @@ export default function App() {
       </header>
 
       <main className="app-main">
-        {tab === 'dashboard' && <Dashboard entries={entries} settings={settings} />}
+        {tab === 'dashboard' && <Dashboard entries={entries} settings={settings} onSettingsChange={setSettings} />}
         {tab === 'activity' && (
           <ActivityTable
             entries={entries}
@@ -54,7 +54,15 @@ export default function App() {
             onEntriesChange={setEntries}
           />
         )}
-        {tab === 'import' && <ImportPanel entries={entries} onEntriesChange={setEntries} onNavigate={setTab} />}
+        {tab === 'import' && (
+          <ImportPanel
+            entries={entries}
+            settings={settings}
+            onEntriesChange={setEntries}
+            onSettingsChange={setSettings}
+            onNavigate={setTab}
+          />
+        )}
         {tab === 'settings' && (
           <Settings
             settings={settings}
@@ -67,6 +75,10 @@ export default function App() {
 
       <footer className="app-footer">
         <p>All data stays in your browser. Nothing is sent to any server.</p>
+        <p className="disclaimer">
+          This site is not affiliated with, endorsed by, or in any way officially connected to Delta Air Lines, Inc.
+          All trademarks and service marks are the property of their respective owners.
+        </p>
       </footer>
     </div>
   );

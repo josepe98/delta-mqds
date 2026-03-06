@@ -13,7 +13,7 @@ export function formatDate(iso: string): string {
 }
 
 export function formatPercent(value: number): string {
-  return `${(value * 100).toFixed(1)}%`;
+  return `${Math.round(value * 100)}%`;
 }
 
 export function getMonthName(monthNum: number): string {
