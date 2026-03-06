@@ -52,9 +52,8 @@ export function HowToUse() {
             tracker will de-duplicate entries and update pending flights that have since completed.
           </li>
           <li>
-            <strong>Export/Import backup</strong> &mdash; Use the Data Management section in
-            Settings to export your data as a JSON file. You can import it back later to restore
-            your session.
+            <strong>Export to CSV</strong> &mdash; Use the Data Management section in
+            Settings to export your activity as a CSV file you can open in Excel or Google Sheets.
           </li>
         </ul>
       </div>

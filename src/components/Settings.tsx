@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { UserSettings, StatusLevel, STATUS_THRESHOLDS, STATUS_COLORS, MQDEntry } from '../types';
-import { createCard, exportData, importData } from '../store';
+import { createCard, exportCSV } from '../store';
 import { formatMQDs } from '../utils/formatters';
 
 interface Props {
@@ -66,31 +66,14 @@ export function Settings({ settings, entries, onSettingsChange, onEntriesChange 
   }
 
   function handleExport() {
-    const json = exportData(entries, settings);
-    const blob = new Blob([json], { type: 'application/json' });
+    const csv = exportCSV(entries);
+    const blob = new Blob([csv], { type: 'text/csv' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `mqd-tracker-backup-${new Date().toISOString().slice(0, 10)}.json`;
+    a.download = `mqd-activity-${new Date().toISOString().slice(0, 10)}.csv`;
     a.click();
     URL.revokeObjectURL(url);
-  }
-
-  function handleImport() {
-    const input = document.createElement('input');
-    input.type = 'file';
-    input.accept = '.json';
-    input.onchange = async () => {
-      const file = input.files?.[0];
-      if (!file) return;
-      const text = await file.text();
-      const data = importData(text);
-      if (data) {
-        onSettingsChange(data.settings);
-        onEntriesChange(data.entries);
-      }
-    };
-    input.click();
   }
 
   function handleClearData() {
@@ -205,8 +188,7 @@ export function Settings({ settings, entries, onSettingsChange, onEntriesChange 
       <div className="card">
         <h3>Data Management</h3>
         <div className="button-row">
-          <button className="btn" onClick={handleExport}>Export Backup (JSON)</button>
-          <button className="btn" onClick={handleImport}>Import Backup</button>
+          <button className="btn" onClick={handleExport}>Export Activity (CSV)</button>
           <button className="btn danger" onClick={handleClearData}>Clear All Data</button>
         </div>
       </div>

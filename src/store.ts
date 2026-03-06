@@ -69,18 +69,27 @@ export function createEntry(partial: Omit<MQDEntry, 'id'>): MQDEntry {
   return { ...partial, id: generateId() };
 }
 
-export function exportData(entries: MQDEntry[], settings: UserSettings): string {
-  return JSON.stringify({ entries, settings, exportedAt: new Date().toISOString() }, null, 2);
+function csvEscape(value: string): string {
+  if (value.includes(',') || value.includes('"') || value.includes('\n')) {
+    return `"${value.replace(/"/g, '""')}"`;
+  }
+  return value;
 }
 
-export function importData(json: string): { entries: MQDEntry[]; settings: UserSettings } | null {
-  try {
-    const data = JSON.parse(json);
-    if (data.entries && data.settings) {
-      return { entries: data.entries, settings: data.settings };
-    }
-    return null;
-  } catch {
-    return null;
-  }
+export function exportCSV(entries: MQDEntry[]): string {
+  const headers = ['Date', 'Category', 'Description', 'Origin', 'Destination', 'Flight', 'Base MQDs', 'Bonus MQDs', 'Total MQDs', 'Status', 'Trip'];
+  const rows = entries.map(e => [
+    e.date,
+    e.category,
+    e.description,
+    e.origin || '',
+    e.destination || '',
+    e.flightNumber || '',
+    String(e.baseMQDs),
+    String(e.bonusMQDs),
+    String(e.totalMQDs),
+    e.status,
+    e.trip || '',
+  ].map(csvEscape).join(','));
+  return [headers.join(','), ...rows].join('\n');
 }
