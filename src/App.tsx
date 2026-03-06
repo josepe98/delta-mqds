@@ -13,6 +13,7 @@ export default function App() {
   const [entries, setEntries] = useState<MQDEntry[]>([]);
   const [settings, setSettings] = useState<UserSettings>(defaultSettings);
   const [tab, setTab] = useState<Tab>('dashboard');
+  const [tipDismissed, setTipDismissed] = useState(false);
 
   return (
     <div className="app">
@@ -43,6 +44,15 @@ export default function App() {
       </header>
 
       <main className="app-main">
+        {entries.length === 0 && !tipDismissed && tab !== 'import' && tab !== 'how-to-use' && (
+          <div className="getting-started-tip">
+            <span>
+              Get started by uploading your MQD Account Activity PDF
+              {' '}<button className="tip-link" onClick={() => setTab('import')}>Go to Import &rarr;</button>
+            </span>
+            <button className="tip-dismiss" onClick={() => setTipDismissed(true)}>&times;</button>
+          </div>
+        )}
         {tab === 'dashboard' && <Dashboard entries={entries} settings={settings} onSettingsChange={setSettings} />}
         {tab === 'activity' && (
           <ActivityTable

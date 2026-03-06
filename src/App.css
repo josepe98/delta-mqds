@@ -113,6 +113,52 @@ body {
   padding: 1.5rem 2rem;
 }
 
+/* Getting started tip */
+.getting-started-tip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #C9633A;
+  border: none;
+  border-left: 4px solid rgba(0, 0, 0, 0.15);
+  border-radius: var(--radius);
+  padding: 0.75rem 1rem;
+  margin-bottom: 1.25rem;
+  font-size: 0.9rem;
+  color: white;
+}
+
+.tip-link {
+  background: none;
+  border: none;
+  color: white;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  text-decoration: underline;
+  font-family: inherit;
+  padding: 0;
+}
+
+.tip-link:hover {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.tip-dismiss {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  color: white;
+  cursor: pointer;
+  opacity: 0.5;
+  padding: 0 0.25rem;
+  line-height: 1;
+}
+
+.tip-dismiss:hover {
+  opacity: 1;
+}
+
 /* Footer */
 .app-footer {
   text-align: center;
