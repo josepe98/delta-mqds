@@ -69,6 +69,22 @@ body {
   letter-spacing: -0.02em;
 }
 
+.beta-badge {
+  font-size: 0.55rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  color: white;
+  padding: 0.15em 0.5em;
+  border-radius: 4px;
+  vertical-align: middle;
+  margin-left: 0.3rem;
+  position: relative;
+  top: -1px;
+}
+
 .header-total {
   font-size: 0.85rem;
   opacity: 0.7;

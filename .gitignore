@@ -4,3 +4,4 @@ dist
 *.local
 debug-*.mjs
 project_files/
+.vercel
