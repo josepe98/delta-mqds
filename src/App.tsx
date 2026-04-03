@@ -19,7 +19,9 @@ export default function App() {
     <div className="app">
       <header className="app-header">
         <div className="header-brand">
-          <img src="/logo-white.svg" alt="MQD Tracker" className="app-logo" />
+          <div className="logo-pill">
+            <img src="/logo-white.svg" alt="MQD Tracker" className="app-logo" />
+          </div>
           <div className="header-text">
             <h1 className="app-title">MQD Tracker <span className="beta-badge">Beta</span></h1>
           </div>

@@ -102,13 +102,9 @@ export function Dashboard({ entries, settings, onSettingsChange }: Props) {
       >
         <div className="hero-title-row">
           {settings.targetLevel !== 'Custom' && <span className="tier-badge large" />}
-          <h2>{settings.targetLevel} Medallion Target</h2>
+          <h2>{settings.targetLevel} Medallion Target: {formatMQDs(target)}</h2>
         </div>
         <div className="hero-numbers">
-          <div className="hero-stat">
-            <span className="hero-label">Target</span>
-            <span className="hero-value">{formatMQDs(target)}</span>
-          </div>
           <div className="hero-stat">
             <span className="hero-label">Earned</span>
             <span className="hero-value earned">{formatMQDs(completeMQDs)}</span>
