@@ -1,0 +1,25 @@
+# MQD Tracker
+
+> A free, private, browser-based tool to track Delta Air Lines Medallion Qualification Dollars (MQDs) toward Medallion status.
+
+MQD Tracker helps Delta SkyMiles members track their progress toward Silver, Gold, Platinum, or Diamond Medallion status by monitoring Medallion Qualification Dollars (MQDs).
+
+## What it does
+
+- Parses Delta Account Activity PDFs client-side to extract MQD activity
+- Tracks earned and pending MQDs by category, trip, and month
+- Forecasts year-end MQD totals based on credit card spending and anticipated trips
+- Supports all four Medallion tiers: Silver ($5,000), Gold ($10,000), Platinum ($15,000), Diamond ($28,000)
+- Exports activity to CSV
+
+## Privacy
+
+All data processing happens in the browser. PDFs are never uploaded to any server. No data is stored — everything is cleared when the page is closed. Vercel Analytics is used for anonymous page view counting only.
+
+## Tech
+
+React 19, TypeScript, Vite, pdf.js. Deployed on Vercel.
+
+## Not affiliated with Delta
+
+This tool is not affiliated with, endorsed by, or officially connected to Delta Air Lines, Inc.
