@@ -162,8 +162,8 @@ function parsePostedSection(lines: string[]): ParsedBlock[] {
     const line = lines[i];
     const isEntryStart =
       /^MQD (Boost|Headstart):/.test(line) ||
-      // Flight: "ATL SFO DL0531" or "CUN ATL DL0595"
-      /^[A-Z]{3}\s+[A-Z]{3}\s+DL/.test(line) ||
+      // Flight: "ATL SFO DL0531", "CUN ATL DL0595", or codeshares like "CDG ATL AF3620"
+      /^[A-Z]{3}\s+[A-Z]{3}\s+[A-Z]{2}\d/.test(line) ||
       // Flight without flight number: "ATL CUN" followed by date or negative miles
       (/^[A-Z]{3}\s+[A-Z]{3}$/.test(line) &&
         i + 1 < lines.length &&
