@@ -29,6 +29,11 @@ export function ImportPanel({ entries, settings, onEntriesChange, onSettingsChan
   const fileRef = useRef<HTMLInputElement>(null);
 
   async function handleFile(file: File) {
+    if (file.size > 20 * 1024 * 1024) {
+      setError('File is too large (max 20 MB). Delta Account Activity PDFs are typically under 5 MB.');
+      setState('error');
+      return;
+    }
     setState('parsing');
     setError('');
     try {
