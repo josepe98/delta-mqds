@@ -12,6 +12,8 @@ A web-based tool that helps airline loyalty program members track their Medallio
 - Handle both posted (complete) and pending entries
 - Support year filtering to exclude prior-year data from multi-year PDFs
 - Skip non-MQD entries: refunds, award redemptions, seat purchases
+- Enforce 20 MB file size limit with a user-facing error message
+- Detect codeshare flights credited to Delta (e.g. Air France operating as DL codeshare)
 
 ### 2.2 De-duplication
 - Fingerprint entries by date + category + amount + flight number
@@ -70,7 +72,7 @@ A web-based tool that helps airline loyalty program members track their Medallio
 - **No server.** The site is a static web application. There is no backend, no API, and no database.
 - **No data storage.** Nothing is saved to localStorage, cookies, session storage, or any cloud service. All data exists only in browser memory (React state) during the active session.
 - **No persistence.** When the user closes the tab, refreshes, or navigates away, all data is permanently gone.
-- **No tracking.** There are no user accounts, no analytics, no cookies, and no third-party scripts beyond Google Fonts.
+- **Minimal analytics.** Vercel Analytics is used for anonymous page-view counting and performance measurement. It does not use cookies, does not collect personal data, and cannot see any imported MQD data. No other analytics or tracking scripts are present.
 - **Local PDF processing.** PDFs are parsed entirely in the browser using JavaScript. The file is never uploaded anywhere.
 
 ### 3.2 Technology Stack
@@ -124,7 +126,7 @@ A crafted PDF exploits an unpatched pdf.js vulnerability to run JavaScript in th
 - No authentication or session management
 - No cookies or local storage
 - No file uploads to any server
-- No third-party analytics or tracking scripts
+- No third-party analytics or tracking scripts (Vercel Analytics is present but cookie-free and data-blind)
 - No user-generated content shared between users
 
 ## 5. Legal
