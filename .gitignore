@@ -5,3 +5,6 @@ dist
 debug-*.mjs
 project_files/
 .vercel
+
+# Local env files — never commit (ADM-041)
+.env
