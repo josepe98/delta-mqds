@@ -1,0 +1,16 @@
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    labels:
+      - "dependencies"
+    groups:
+      npm-routine:
+        applies-to: version-updates
+        update-types: ["patch", "minor"]
+      npm-security:
+        applies-to: security-updates
+        patterns: ["*"]
