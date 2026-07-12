@@ -77,7 +77,7 @@ A web-based tool that helps airline loyalty program members track their Medallio
 
 ### 3.2 Technology Stack
 - React 19 + TypeScript
-- Vite 6 (build tooling)
+- Vite 8 (build tooling)
 - pdfjs-dist (Mozilla's pdf.js for client-side PDF text extraction)
 - No other runtime dependencies
 
